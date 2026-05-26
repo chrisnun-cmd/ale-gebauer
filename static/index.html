@@ -84,21 +84,16 @@
     padding: 6rem 1.5rem 4rem;
     overflow: hidden;
   }
-  /* Imagen de portada: poné tu foto como static/portada.jpg y se usará automáticamente.
-     Mientras no exista, se ve el degradado de respaldo. */
-  .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(180deg, rgba(31,30,28,0.30) 0%, rgba(31,30,28,0.22) 40%, rgba(31,30,28,0.55) 100%),
-      url('/portada.jpg') center/cover no-repeat,
-      linear-gradient(135deg, #3a3833 0%, #2b2a28 55%, #524a43 100%);
-    background-blend-mode: normal;
-    z-index: -1;
+  /* Imagen de portada: tu foto está en static/portada.jpg y se sirve en /portada.jpg */
+  .hero {
+    background-image:
+      linear-gradient(180deg, rgba(31,30,28,0.35) 0%, rgba(31,30,28,0.25) 40%, rgba(31,30,28,0.60) 100%),
+      url('/portada.jpg');
+    background-size: cover, cover;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    background-color: #2b2a28;
   }
-  /* fallback de color por si la imagen no carga */
-  .hero { background: linear-gradient(135deg, #3a3833 0%, #2b2a28 60%, #4a4339 100%); }
 
   .hero .eyebrow {
     font-size: 0.72rem;
