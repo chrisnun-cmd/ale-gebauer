@@ -7,18 +7,17 @@
 <meta name="description" content="Administramos tu casa, cabaña o departamento para arriendo temporal. Nos encargamos de todo: desde el equipamiento hasta la limpieza. Planes a tu medida.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&family=Mr+De+Haviland&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&family=Mr+De+Haviland&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f0ebe3;          /* beige cálido del folleto */
-    --ink: #25242420;
-    --dark: #2b2a28;        /* antracita del folleto */
+    --bg: #f0ebe3;
+    --dark: #2b2a28;
     --dark-deep: #1f1e1c;
-    --cream: #f0ebe3;
     --fg: #2b2a28;
-    --fg-soft: #6b665e;
-    --accent: #b08d57;      /* dorado cálido */
-    --line: rgba(43, 42, 40, 0.14);
+    --fg-soft: #5e594f;
+    --accent: #b08d57;
+    --accent-light: #c9a26a;
+    --line: rgba(43, 42, 40, 0.16);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,9 +32,9 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 400; line-height: 1.05; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; line-height: 1.04; }
 
-  .script { font-family: 'Mr De Haviland', cursive; color: var(--accent); font-weight: 400; }
+  .script { font-family: 'Mr De Haviland', cursive; color: var(--accent-light); font-weight: 400; }
 
   /* ---------- NAV ---------- */
   nav {
@@ -44,34 +43,48 @@
     z-index: 10;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 2rem clamp(1.5rem, 5vw, 4.5rem);
+    align-items: flex-start;
+    padding: 2.2rem clamp(1.5rem, 5vw, 4.5rem);
   }
+  /* Marca + subtítulo apilados */
+  .brand-wrap { display: flex; flex-direction: column; gap: 0.5rem; }
   nav .brand {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    letter-spacing: 0.18em;
+    font-size: 1.7rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #fff;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+    line-height: 1;
   }
-  nav .brand b { font-weight: 600; }
+  nav .brand b { font-weight: 700; }
+  nav .brand-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    text-shadow: 0 1px 10px rgba(0,0,0,0.6);
+    font-weight: 400;
+  }
   nav .menu {
     display: flex;
     gap: 2.4rem;
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
+    padding-top: 0.5rem;
   }
   nav .menu a {
-    color: rgba(255,255,255,0.85);
+    color: #fff;
     text-decoration: none;
     transition: color 0.3s;
-    position: relative;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    font-weight: 400;
   }
-  nav .menu a:hover { color: var(--accent); }
+  nav .menu a:hover { color: var(--accent-light); }
   @media (max-width: 720px) { nav .menu { display: none; } }
 
-  /* ---------- HERO ---------- */
+  /* ---------- HERO con PARALLAX ---------- */
   .hero {
     position: relative;
     min-height: 100vh;
@@ -83,51 +96,67 @@
     color: #fff;
     padding: 6rem 1.5rem 4rem;
     overflow: hidden;
-  }
-  /* Imagen de portada: tu foto está en static/portada.jpg y se sirve en /portada.jpg */
-  .hero {
+    /* Capa oscura + foto. background-attachment: fixed = efecto parallax */
     background-image:
-      linear-gradient(180deg, rgba(31,30,28,0.35) 0%, rgba(31,30,28,0.25) 40%, rgba(31,30,28,0.60) 100%),
+      linear-gradient(180deg, rgba(20,19,17,0.55) 0%, rgba(20,19,17,0.40) 45%, rgba(20,19,17,0.70) 100%),
       url('/portada.jpg');
     background-size: cover, cover;
     background-position: center, center;
     background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed, fixed;
     background-color: #2b2a28;
+  }
+  /* En móvil el parallax fixed puede fallar, lo desactivamos para que se vea bien */
+  @media (max-width: 820px) {
+    .hero { background-attachment: scroll, scroll; }
   }
 
   .hero .eyebrow {
-    font-size: 0.72rem;
-    letter-spacing: 0.4em;
+    font-size: 0.78rem;
+    letter-spacing: 0.42em;
     text-transform: uppercase;
     margin-bottom: 1.8rem;
+    color: var(--accent-light);
+    text-shadow: 0 2px 16px rgba(0,0,0,0.7);
     opacity: 0;
     animation: fade 1s ease forwards 0.2s;
   }
   .hero h1 {
-    font-size: clamp(2.6rem, 6.5vw, 5.5rem);
-    max-width: 16ch;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 600;
+    max-width: 15ch;
     margin-bottom: 0.5rem;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.5);
     opacity: 0;
     animation: fade 1.2s ease forwards 0.4s;
   }
-  .hero h1 .script { font-size: clamp(3.4rem, 9vw, 7rem); display: inline-block; line-height: 0.7; }
+  .hero h1 .script {
+    font-size: clamp(3.8rem, 10vw, 7.5rem);
+    display: inline-block; line-height: 0.7;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
   .hero p {
-    max-width: 44ch;
-    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
-    color: rgba(255,255,255,0.85);
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.7);
     margin: 2rem auto 2.8rem;
     opacity: 0;
     animation: fade 1.2s ease forwards 0.7s;
   }
   .btn {
     display: inline-block;
-    border: 1px solid rgba(255,255,255,0.6);
+    border: 1.5px solid rgba(255,255,255,0.85);
     color: #fff;
     text-decoration: none;
-    padding: 1rem 2.6rem;
-    font-size: 0.74rem;
+    padding: 1.05rem 2.8rem;
+    font-size: 0.78rem;
     letter-spacing: 0.25em;
     text-transform: uppercase;
+    font-weight: 500;
+    backdrop-filter: blur(2px);
+    background: rgba(0,0,0,0.12);
     transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
     opacity: 0;
     animation: fade 1.2s ease forwards 0.9s;
@@ -139,42 +168,42 @@
     bottom: 2rem; left: 50%;
     transform: translateX(-50%);
     width: 1px; height: 48px;
-    background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0));
+    background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0));
     animation: fade 1s ease forwards 1.2s; opacity: 0;
   }
 
   /* ---------- SECCIÓN SERVICIOS ---------- */
-  section { padding: clamp(4.5rem, 10vw, 8rem) clamp(1.5rem, 6vw, 6rem); }
+  section { padding: clamp(4.5rem, 10vw, 8.5rem) clamp(1.5rem, 6vw, 6rem); }
 
-  .intro { text-align: center; max-width: 760px; margin: 0 auto; }
+  .intro { text-align: center; max-width: 780px; margin: 0 auto; }
   .intro .label {
-    font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 1.4rem;
+    font-size: 0.78rem; letter-spacing: 0.38em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.4rem; font-weight: 500;
   }
-  .intro h2 { font-size: clamp(2rem, 4.5vw, 3.4rem); margin-bottom: 1.6rem; }
-  .intro p { color: var(--fg-soft); font-size: 1.05rem; }
+  .intro h2 { font-size: clamp(2.2rem, 5vw, 3.8rem); margin-bottom: 1.6rem; font-weight: 500; }
+  .intro p { color: var(--fg-soft); font-size: 1.12rem; }
 
   .services {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 2.5rem;
     max-width: 1100px;
-    margin: 4rem auto 0;
+    margin: 4.5rem auto 0;
   }
   .card {
     text-align: center;
-    padding: 2.5rem 1.5rem;
+    padding: 2.8rem 1.6rem;
     border: 1px solid var(--line);
-    background: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.45);
     transition: transform 0.4s, box-shadow 0.4s;
   }
-  .card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -28px rgba(43,42,40,0.4); }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -28px rgba(43,42,40,0.45); }
   .card .num {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2.4rem; color: var(--accent); display: block; margin-bottom: 0.6rem;
+    font-size: 2.6rem; color: var(--accent); display: block; margin-bottom: 0.6rem; font-weight: 600;
   }
-  .card h3 { font-size: 1.5rem; margin-bottom: 0.8rem; }
-  .card p { font-size: 0.92rem; color: var(--fg-soft); }
+  .card h3 { font-size: 1.65rem; margin-bottom: 0.8rem; font-weight: 600; }
+  .card p { font-size: 0.95rem; color: var(--fg-soft); }
 
   /* ---------- BLOQUE OSCURO CTA ---------- */
   .dark-block {
@@ -182,47 +211,46 @@
     color: #fff;
     text-align: center;
   }
-  .dark-block h2 { font-size: clamp(2rem, 5vw, 3.6rem); margin-bottom: 1.2rem; }
-  .dark-block h2 .script { font-size: clamp(3rem, 8vw, 5.5rem); }
-  .dark-block p { color: rgba(255,255,255,0.75); max-width: 48ch; margin: 0 auto 2.6rem; }
+  .dark-block h2 { font-size: clamp(2.2rem, 5.5vw, 4rem); margin-bottom: 1.2rem; font-weight: 500; }
+  .dark-block h2 .script { font-size: clamp(3.4rem, 9vw, 6rem); }
+  .dark-block p { color: rgba(255,255,255,0.8); max-width: 50ch; margin: 0 auto 2.6rem; font-size: 1.08rem; }
 
   /* ---------- CONTACTO ---------- */
   .contact-sec { text-align: center; }
   .contact-sec .label {
-    font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 1.2rem;
+    font-size: 0.78rem; letter-spacing: 0.38em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.2rem; font-weight: 500;
   }
-  .contact-sec h2 { font-size: clamp(2rem, 4.5vw, 3rem); margin-bottom: 2.5rem; }
+  .contact-sec h2 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin-bottom: 2.5rem; font-weight: 500; }
   .contact-list {
-    display: flex; flex-direction: column; gap: 1.2rem; align-items: center;
-    font-size: 1.15rem;
+    display: flex; flex-direction: column; gap: 1.3rem; align-items: center;
+    font-size: 1.2rem;
   }
   .contact-list a {
-    color: var(--fg); text-decoration: none; letter-spacing: 0.04em;
+    color: var(--fg); text-decoration: none; letter-spacing: 0.04em; font-weight: 400;
     border-bottom: 1px solid transparent; padding-bottom: 3px; transition: border-color 0.3s, color 0.3s;
   }
   .contact-list a:hover { color: var(--accent); border-color: var(--accent); }
-  .contact-list .ico { color: var(--accent); margin-right: 0.6rem; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  .contact-list .ico { color: var(--accent); margin-right: 0.6rem; font-size: 0.92rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; }
 
   /* ---------- FOOTER ---------- */
   footer {
     background: var(--dark-deep);
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.6);
     text-align: center;
-    padding: 2.5rem 1.5rem;
-    font-size: 0.72rem;
+    padding: 2.8rem 1.5rem;
+    font-size: 0.74rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
   }
   footer .fbrand {
     font-family: 'Cormorant Garamond', serif;
-    color: #fff; font-size: 1.3rem; letter-spacing: 0.22em; margin-bottom: 0.8rem;
+    color: #fff; font-size: 1.5rem; letter-spacing: 0.22em; margin-bottom: 0.8rem; font-weight: 500;
   }
 
   @keyframes fade { to { opacity: 1; transform: translateY(0); } }
   .hero .eyebrow, .hero h1, .hero p, .btn { transform: translateY(20px); }
 
-  /* reveal on scroll */
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22,1,0.36,1); }
   .reveal.in { opacity: 1; transform: translateY(0); }
 </style>
@@ -230,7 +258,10 @@
 <body>
 
   <nav>
-    <div class="brand">Ale <b>Gebauer</b></div>
+    <div class="brand-wrap">
+      <div class="brand">Ale <b>Gebauer</b></div>
+      <div class="brand-sub">Administración de Propiedades · Arriendo Temporal</div>
+    </div>
     <div class="menu">
       <a href="#servicios">Servicios</a>
       <a href="#nosotros">Nosotros</a>
@@ -240,7 +271,7 @@
 
   <!-- HERO -->
   <header class="hero" id="inicio">
-    <p class="eyebrow">Administración de Propiedades · Arriendo Temporal</p>
+    <p class="eyebrow">Tu propiedad en las mejores manos</p>
     <h1>Administra tu casa o depto con <span class="script">nosotros</span></h1>
     <p>Si tienes cabañas, casa o departamento y lo quieres arrendar temporalmente por plataformas online, nos encargamos de todo por ti.</p>
     <a href="#contacto" class="btn">Conversemos</a>
@@ -302,7 +333,6 @@
   </footer>
 
   <script>
-    // reveal on scroll
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
     }, { threshold: 0.15 });
