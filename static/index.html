@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ale Gebauer · Administración de Propiedades para Arriendo Temporal</title>
+<meta name="description" content="Administramos tu casa, cabaña o departamento para arriendo temporal. Nos encargamos de todo: desde el equipamiento hasta la limpieza. Planes a tu medida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&family=Mr+De+Haviland&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0ebe3;          /* beige cálido del folleto */
+    --ink: #25242420;
+    --dark: #2b2a28;        /* antracita del folleto */
+    --dark-deep: #1f1e1c;
+    --cream: #f0ebe3;
+    --fg: #2b2a28;
+    --fg-soft: #6b665e;
+    --accent: #b08d57;      /* dorado cálido */
+    --line: rgba(43, 42, 40, 0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 400; line-height: 1.05; }
+
+  .script { font-family: 'Mr De Haviland', cursive; color: var(--accent); font-weight: 400; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem clamp(1.5rem, 5vw, 4.5rem);
+  }
+  nav .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  nav .brand b { font-weight: 600; }
+  nav .menu {
+    display: flex;
+    gap: 2.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  nav .menu a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+  nav .menu a:hover { color: var(--accent); }
+  @media (max-width: 720px) { nav .menu { display: none; } }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    padding: 6rem 1.5rem 4rem;
+    overflow: hidden;
+  }
+  /* Imagen de portada: poné tu foto como static/portada.jpg y se usará automáticamente.
+     Mientras no exista, se ve el degradado de respaldo. */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(31,30,28,0.45) 0%, rgba(31,30,28,0.35) 40%, rgba(31,30,28,0.65) 100%),
+      url('/portada.jpg') center/cover no-repeat,
+      linear-gradient(135deg, #3a3833 0%, #2b2a28 55%, #524a43 100%);
+    background-blend-mode: normal;
+    z-index: -1;
+  }
+  /* fallback de color por si la imagen no carga */
+  .hero { background: linear-gradient(135deg, #3a3833 0%, #2b2a28 60%, #4a4339 100%); }
+
+  .hero .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: fade 1s ease forwards 0.2s;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 6.5vw, 5.5rem);
+    max-width: 16ch;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fade 1.2s ease forwards 0.4s;
+  }
+  .hero h1 .script { font-size: clamp(3.4rem, 9vw, 7rem); display: inline-block; line-height: 0.7; }
+  .hero p {
+    max-width: 44ch;
+    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+    color: rgba(255,255,255,0.85);
+    margin: 2rem auto 2.8rem;
+    opacity: 0;
+    animation: fade 1.2s ease forwards 0.7s;
+  }
+  .btn {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.6);
+    color: #fff;
+    text-decoration: none;
+    padding: 1rem 2.6rem;
+    font-size: 0.74rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+    opacity: 0;
+    animation: fade 1.2s ease forwards 0.9s;
+  }
+  .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    width: 1px; height: 48px;
+    background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0));
+    animation: fade 1s ease forwards 1.2s; opacity: 0;
+  }
+
+  /* ---------- SECCIÓN SERVICIOS ---------- */
+  section { padding: clamp(4.5rem, 10vw, 8rem) clamp(1.5rem, 6vw, 6rem); }
+
+  .intro { text-align: center; max-width: 760px; margin: 0 auto; }
+  .intro .label {
+    font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.4rem;
+  }
+  .intro h2 { font-size: clamp(2rem, 4.5vw, 3.4rem); margin-bottom: 1.6rem; }
+  .intro p { color: var(--fg-soft); font-size: 1.05rem; }
+
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2.5rem;
+    max-width: 1100px;
+    margin: 4rem auto 0;
+  }
+  .card {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.4);
+    transition: transform 0.4s, box-shadow 0.4s;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -28px rgba(43,42,40,0.4); }
+  .card .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; color: var(--accent); display: block; margin-bottom: 0.6rem;
+  }
+  .card h3 { font-size: 1.5rem; margin-bottom: 0.8rem; }
+  .card p { font-size: 0.92rem; color: var(--fg-soft); }
+
+  /* ---------- BLOQUE OSCURO CTA ---------- */
+  .dark-block {
+    background: var(--dark);
+    color: #fff;
+    text-align: center;
+  }
+  .dark-block h2 { font-size: clamp(2rem, 5vw, 3.6rem); margin-bottom: 1.2rem; }
+  .dark-block h2 .script { font-size: clamp(3rem, 8vw, 5.5rem); }
+  .dark-block p { color: rgba(255,255,255,0.75); max-width: 48ch; margin: 0 auto 2.6rem; }
+
+  /* ---------- CONTACTO ---------- */
+  .contact-sec { text-align: center; }
+  .contact-sec .label {
+    font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.2rem;
+  }
+  .contact-sec h2 { font-size: clamp(2rem, 4.5vw, 3rem); margin-bottom: 2.5rem; }
+  .contact-list {
+    display: flex; flex-direction: column; gap: 1.2rem; align-items: center;
+    font-size: 1.15rem;
+  }
+  .contact-list a {
+    color: var(--fg); text-decoration: none; letter-spacing: 0.04em;
+    border-bottom: 1px solid transparent; padding-bottom: 3px; transition: border-color 0.3s, color 0.3s;
+  }
+  .contact-list a:hover { color: var(--accent); border-color: var(--accent); }
+  .contact-list .ico { color: var(--accent); margin-right: 0.6rem; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background: var(--dark-deep);
+    color: rgba(255,255,255,0.55);
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  footer .fbrand {
+    font-family: 'Cormorant Garamond', serif;
+    color: #fff; font-size: 1.3rem; letter-spacing: 0.22em; margin-bottom: 0.8rem;
+  }
+
+  @keyframes fade { to { opacity: 1; transform: translateY(0); } }
+  .hero .eyebrow, .hero h1, .hero p, .btn { transform: translateY(20px); }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="brand">Ale <b>Gebauer</b></div>
+    <div class="menu">
+      <a href="#servicios">Servicios</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="inicio">
+    <p class="eyebrow">Administración de Propiedades · Arriendo Temporal</p>
+    <h1>Administra tu casa o depto con <span class="script">nosotros</span></h1>
+    <p>Si tienes cabañas, casa o departamento y lo quieres arrendar temporalmente por plataformas online, nos encargamos de todo por ti.</p>
+    <a href="#contacto" class="btn">Conversemos</a>
+    <div class="scroll-cue"></div>
+  </header>
+
+  <!-- INTRO + SERVICIOS -->
+  <section id="servicios">
+    <div class="intro">
+      <p class="label">Qué hacemos</p>
+      <h2>Gestión integral, sin que te preocupes de nada</h2>
+      <p>Maximizamos los ingresos de tu propiedad en plataformas como Airbnb y Booking, mientras nosotros nos ocupamos de cada detalle. Tú recibes; nosotros gestionamos.</p>
+    </div>
+
+    <div class="services">
+      <div class="card reveal">
+        <span class="num">01</span>
+        <h3>Equipamiento</h3>
+        <p>Preparamos y equipamos tu propiedad para que destaque y reciba a los huéspedes en óptimas condiciones.</p>
+      </div>
+      <div class="card reveal">
+        <span class="num">02</span>
+        <h3>Publicación &amp; Reservas</h3>
+        <p>Gestionamos los anuncios en plataformas online, precios, calendarios y la comunicación con los huéspedes.</p>
+      </div>
+      <div class="card reveal">
+        <span class="num">03</span>
+        <h3>Limpieza</h3>
+        <p>Coordinamos la limpieza y el mantenimiento entre estadías para mantener la mejor experiencia y reseñas.</p>
+      </div>
+      <div class="card reveal">
+        <span class="num">04</span>
+        <h3>Planes a tu medida</h3>
+        <p>Tenemos planes de acuerdo a tus necesidades, ya sea una cabaña, una casa o varios departamentos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE OSCURO -->
+  <section class="dark-block" id="nosotros">
+    <h2>Nos encargamos de <span class="script">todo</span></h2>
+    <p class="reveal">Desde el equipamiento hasta la limpieza. Tú delegas la logística y nosotros nos ocupamos de que tu propiedad rinda al máximo, con la tranquilidad de que está en buenas manos.</p>
+    <a href="#contacto" class="btn" style="opacity:1; transform:none; animation:none;">Solicita tu plan</a>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="contact-sec" id="contacto">
+    <p class="label">Contacto</p>
+    <h2>Hablemos de tu propiedad</h2>
+    <div class="contact-list">
+      <a href="https://wa.me/56977215616"><span class="ico">Tel</span>+56 9 7721 5616</a>
+      <a href="mailto:contacto@alegebauer.com"><span class="ico">Email</span>contacto@alegebauer.com</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fbrand">Ale Gebauer</div>
+    <div>© 2026 · Administración de Propiedades para Arriendo Temporal · Chile</div>
+  </footer>
+
+  <script>
+    // reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
